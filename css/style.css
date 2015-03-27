@@ -1,0 +1,98 @@
+/*--------------------------------
+       PAGE STYLES
+--------------------------------*/
+
+html {
+	height: 100%;
+}
+body {
+	height: 100%;
+	background: -webkit-linear-gradient(#C0E5E7, #6AC9CD);
+}
+
+/*--------------------------------
+          CENTER CIRCLE
+--------------------------------*/
+
+#centercircle {
+	transition: all 0.3s;
+	width: 80px;
+	height: 80px;
+	background-color: #EF9D9C;
+	border-radius: 50%;
+	position: absolute;
+	top: 20%;
+	left: 70%;
+
+}
+
+#centercircle:before {
+	transform: scale3d(1,1,1);
+	-webkit-transform: scale3d(1,1,1);
+	content: '';
+	width: 80px;
+	height: 80px;
+	border-radius: 50%;
+	opacity: 1;
+	background-color: #EF9D9C;
+	-webkit-animation: pulse 1.5s linear infinite;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+
+/*--------------------------------
+          BUBBLES
+--------------------------------*/
+.circle {
+	height: 20px;
+	width: 20px;
+	border-radius: 50%;
+	border: 2px solid black;
+	position: absolute;
+	bottom: 800px;
+	left: 20%;
+	-webkit-animation: bubbleup 10s ease infinite;
+}
+
+
+#two {
+	left: 30%;
+	height: 30px;
+	width: 30px;
+	-webkit-animation: bubbleup 6s ease infinite;
+	-webkit-animation-delay: 1s;
+}
+
+#three {
+	left: 70%;
+	-webkit-animation: bubbleup 8s ease infinite;
+	-webkit-animation-delay: .5s;
+}
+
+/*--------------------------------
+        FISH
+--------------------------------*/
+
+#fish {
+	width: 100px;
+	position: absolute;
+	left: 100%;
+	top: 200px;
+	-webkit-animation: swimleft 10s infinite;
+}
+
+#clownfish {
+	width: 170px;
+	position: absolute;
+	left: -300px;
+	top: 400px;
+	-webkit-animation: swimright 15s infinite;
+}
+
+#mouth {
+	opacity: 0;
+	-webkit-animation: breathe 3s infinite;
+	fill: #2D212C;
+}
