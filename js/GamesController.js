@@ -4,10 +4,12 @@
 		.controller("GamesController", GamesController);
 
 	function GamesController() {
-		
 		var self = this;
+		var overlay = document.getElementById('overlay');
+		var winnerSpan = document.getElementById('winnerSpan');
 		self.init = init;
 		self.makeMove = makeMove;
+		self.clearBoard = clearBoard;
 		self.board = [];
 		self.turns = 0;
 		self.player1;
@@ -36,8 +38,8 @@
 			self.player1 = new Player(getName());
 			self.player2 = new Player(getName());
 			*/
-			self.player1 = new Player("rachel", "X");
-			self.player2 = new Player("bob", "O");
+			self.player1 = new Player("Rachel", "X");
+			self.player2 = new Player("Bob", "O");
 		}
 
 		/***************************
@@ -66,24 +68,37 @@
 
 		function makeMove(index) {
 			var winner;
+			var playerSymbol;
 			var thisSquare = self.board[index];
+
 			if (thisSquare.beenClicked) {
 				alert("ALREADY BEEN CLICKED");
 			}
+
 			else if (self.turns % 2 === 0) {
-				thisSquare.marked = self.player1.symbol;
-				thisSquare.beenClicked = true;
-				self.turns++;
-				winner = checkForWinner("X");
-				alertWinner(winner);
+				playerSymbol = self.player1.symbol;
+				updateSquare(thisSquare, playerSymbol);
+				winner = checkForWinner(playerSymbol);
+				if (winner) {
+					self.player1.wins++;
+					restartGame(self.player1.name);
+				}
 			}
 			else {
-				thisSquare.marked = self.player2.symbol;
-				thisSquare.beenClicked = true;
-				self.turns++;
-				winner = checkForWinner("O");
-				alertWinner(winner);
+				playerSymbol = self.player2.symbol;
+				updateSquare(thisSquare, playerSymbol);
+				winner = checkForWinner(playerSymbol);
+				if (winner) {
+					self.player2.wins++;
+					restartGame(self.player2.name);
+				}
 			}
+		}
+
+		function updateSquare(square, player) {
+			square.marked = player;
+			square.beenClicked = true;
+			self.turns++;
 		}
 
 		// change this to retrieve value of input box
@@ -96,6 +111,22 @@
 		 *  HIDDEN COMPUTER FUNCS  *
 		 ***************************/
 
+		// asks user if they want to restart game
+		function restartGame(winnerName) {
+			winnerSpan.innerHTML = winnerName;
+			overlay.style.visibility="visible";
+		}
+
+		// clears board 
+		function clearBoard() {
+			for (var i = 0; i < 9; i++) {
+				self.board[i].marked = null;
+				self.board[i].beenClicked = false;
+			}
+			overlay.style.visibility="hidden";
+		}
+
+		// checks for winner
 		function checkForWinner (player) {
 			var winner;
 			if (self.board[0].marked == player) {
@@ -135,18 +166,8 @@
 			return winner;
 		}
 
-		// alert winner
-		function alertWinner (winner) {
-			if (winner) {
-				alert("winner!");
-			}
-		}
-
 		// change init call to button later and remove
 		init();
-		console.log(self.board);
-		console.log(self.player1);
-		console.log(self.player2);
 	}
 
 
