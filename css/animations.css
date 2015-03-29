@@ -18,7 +18,7 @@
 	0% {
 		bottom: 0;
 	}
-	60% {
+	40% {
 			bottom: 800px;
 		}
 }
@@ -75,3 +75,23 @@
 			left: 120%;
 		}
 }
+
+/*--------------------------------
+        Blinking Eye
+--------------------------------*/
+
+@-webkit-keyframes blink { 
+  0% { -webkit-transform: scale(1, 1);} 
+  1% { -webkit-transform: scale(1, .2); } 
+  2% { -webkit-transform: scale(1, 1); } 
+  60% { -webkit-transform: scale(1, 1); } 
+  61% { -webkit-transform: scale(1, .2);} 
+  62% { -webkit-transform: scale(1, 1); } 
+  100% { -webkit-transform: scale(1, 1); }
+}
+
+@-webkit-keyframes sway { 
+  50% { -webkit-transform: rotate(-10deg);} 
+  100% { -webkit-transform: rotate(5deg);}
+}
+

@@ -10,10 +10,14 @@
 		self.init = init;
 		self.makeMove = makeMove;
 		self.clearBoard = clearBoard;
+		self.startNewGame = startNewGame;
 		self.board = [];
 		self.turns = 0;
 		self.player1;
 		self.player2;
+
+		// keeps track of what page the user is seeing
+		self.pageDisplay;
 
 		/***************************
 		 *      INITIALIZERS       *
@@ -23,6 +27,7 @@
 		function init() {
 			makeBoard();
 			makePlayers();
+			self.player1.turn = true;
 		}
 
 		// makes gameboard
@@ -51,7 +56,7 @@
 			// checks if square has already been played
 			this.beenClicked = false;
 			// checks which player marked square - will get set to 'x' or 'o'
-			this.marked = " ";
+			this.marked = "";
 		}
 
 		// player constructor 
@@ -60,6 +65,7 @@
 			this.makeMove = makeMove;
 			this.name = name;
 			this.symbol = symbol;
+			this.turn = true;
 		}
 
 		/***************************
@@ -70,7 +76,7 @@
 			var winner;
 			var playerSymbol;
 			var thisSquare = self.board[index];
-
+			
 			if (thisSquare.beenClicked) {
 				alert("ALREADY BEEN CLICKED");
 			}
@@ -83,15 +89,26 @@
 					self.player1.wins++;
 					restartGame(self.player1.name);
 				}
+				else {
+					checkForTie();
+				}
+				self.player1.turn = false;
+				self.player2.turn = true;
 			}
 			else {
 				playerSymbol = self.player2.symbol;
 				updateSquare(thisSquare, playerSymbol);
+
 				winner = checkForWinner(playerSymbol);
 				if (winner) {
 					self.player2.wins++;
 					restartGame(self.player2.name);
 				}
+				else {
+					checkForTie();
+				}
+				self.player2.turn = false;
+				self.player1.turn = true;
 			}
 		}
 
@@ -111,19 +128,41 @@
 		 *  HIDDEN COMPUTER FUNCS  *
 		 ***************************/
 
+		// changes page to new game
+		function startNewGame() {
+			self.pageDisplay = 1;
+		}
+
 		// asks user if they want to restart game
 		function restartGame(winnerName) {
-			winnerSpan.innerHTML = winnerName;
-			overlay.style.visibility="visible";
+			setTimeout(function() {
+				winnerSpan.innerHTML = winnerName;
+				overlay.style.visibility="visible";
+			}, 1000);
 		}
 
 		// clears board 
 		function clearBoard() {
 			for (var i = 0; i < 9; i++) {
-				self.board[i].marked = null;
+				self.board[i].marked = "";
 				self.board[i].beenClicked = false;
 			}
 			overlay.style.visibility="hidden";
+			console.log(self.board);
+		}
+
+		// checks for tie
+		function checkForTie() {
+			var checkedSquareCount = 0;
+			for (var i = 0; i < 9; i++) {
+				if(self.board[i].marked !== "") {
+					checkedSquareCount += 1;
+				}
+			}
+			if (checkedSquareCount > 8) {
+				restartGame("No one");
+			}
+			console.log(checkedSquareCount);
 		}
 
 		// checks for winner
@@ -150,6 +189,9 @@
 				if (self.board[5].marked == player && self.board[8].marked == player) {
 					winner = player;
 				}	
+				if (self.board[4].marked == player && self.board[6].marked == player) {
+					winner = player;
+				}
 			}
 
 			else if (self.board[3].marked == player) {
