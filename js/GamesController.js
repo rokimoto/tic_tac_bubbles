@@ -3,18 +3,22 @@
 		.module("TicTacToeApp")
 		.controller("GamesController", GamesController);
 
-	function GamesController() {
+	GamesController.$inject = ['$firebaseObject', '$firebaseArray'];
+
+	function GamesController($firebaseObject, $firebaseArray) {
 		var self = this;
 		var overlay = document.getElementById('overlay');
 		var winnerSpan = document.getElementById('winnerSpan');
 		self.init = init;
 		self.makeMove = makeMove;
 		self.clearBoard = clearBoard;
-		self.startNewGame = startNewGame;
+		self.changePage = changePage;
 		self.board = [];
 		self.turns = 0;
 		self.player1;
 		self.player2;
+		self.gameName = null;
+		self.makePlayers = makePlayers;
 
 		// keeps track of what page the user is seeing
 		self.pageDisplay;
@@ -43,8 +47,8 @@
 			self.player1 = new Player(getName());
 			self.player2 = new Player(getName());
 			*/
-			self.player1 = new Player("Rachel", "X");
-			self.player2 = new Player("Bob", "O");
+			self.player1 = new Player(self.player1Name, "X", true);
+			self.player2 = new Player(self.player2Name, "O", false);
 		}
 
 		/***************************
@@ -60,12 +64,12 @@
 		}
 
 		// player constructor 
-		function Player(name, symbol) {
+		function Player(name, symbol, turn) {
 			this.wins = 0;
 			this.makeMove = makeMove;
 			this.name = name;
 			this.symbol = symbol;
-			this.turn = true;
+			this.turn = turn;
 		}
 
 		/***************************
@@ -129,8 +133,8 @@
 		 ***************************/
 
 		// changes page to new game
-		function startNewGame() {
-			self.pageDisplay = 1;
+		function changePage(page) {
+			self.pageDisplay = page;
 		}
 
 		// asks user if they want to restart game
@@ -207,6 +211,14 @@
 			}
 			return winner;
 		}
+
+		/***************************
+		 *        FIREBASE        *
+		 ***************************/
+
+
+
+
 
 		// change init call to button later and remove
 		init();

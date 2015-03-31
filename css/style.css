@@ -23,7 +23,8 @@ body {
 	margin: 80px auto 0;
 	height: 150px;
 	width: 440px;
-	color: #B20072;
+	font-family: 'Nunito', sans-serif;
+	color: #264949;
 	border-radius: 25px;
 	padding: 20px;
 	text-align: center;
@@ -42,6 +43,39 @@ body {
 
 .join-game {
 	margin-bottom: -10px;
+}
+
+/*--------------------------------
+       NEW GAME STYLES
+--------------------------------*/
+
+.new-game-page-div {
+	background-color: white;
+	font-size: 1.35em;
+	margin: 80px auto 0;
+	height: 600px;
+	width: 440px;
+	font-family: 'Nunito', sans-serif;
+	color: #264949;
+	border-radius: 25px;
+	padding: 30px 46px;
+	text-align: center;
+}
+
+.new-game-page-div input {
+	width: 88%;
+	padding: 10px;
+	font-size: 1.2em;
+	color: black;
+	border: 2px solid grey;
+}
+
+.new-game-page-div input:nth-child(2) {
+	margin-bottom: 20px;
+}
+
+.new-game-page-div input:nth-child(4) {
+	margin-bottom: 40px;
 }
 
 /*--------------------------------
@@ -160,7 +194,7 @@ body {
 	border-radius: 25px;
 }
 
-#modal button {
+.pink-button {
 	background-color: #EF9D9C;
 	color: black;
 	padding: 10px;
@@ -220,7 +254,7 @@ body {
 	border: 2px solid white;
 	position: absolute;
 	bottom: 800px;
-	left: 20%;
+	left: 15%;
 	-webkit-animation: bubbleup 12s ease infinite;
 }
 
@@ -239,6 +273,17 @@ body {
 	-webkit-animation-delay: .5s;
 }
 
+#four {
+	left: 40%;
+	-webkit-animation: bubbleup 6s ease infinite;
+	-webkit-animation-delay: 3s;
+}
+
+#five {
+	left: 60%;
+	-webkit-animation: bubbleup 10s ease infinite;
+	-webkit-animation-delay: 4s;
+}
 /*--------------------------------
         FISH
 --------------------------------*/

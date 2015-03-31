@@ -8,29 +8,51 @@
 	<link rel="stylesheet" type="text/css" href="css/animations.css">
 	<link rel="stylesheet" type="text/css" href="css/style.css">
 </head>
-<body ng-controller="GamesController as games" ng-switch="games.pageDisplay" class="ui grid">
-	<div class="first-page" ng-switch-default>
-		<div ng-click="games.startNewGame()" class="intro-div new-game">
-			<h1>Start New Game</h1>
+<body ng-controller="GamesController as games">
+	<div ng-switch="games.pageDisplay" class="ui grid">
+		<div class="first-page" ng-switch-default>
+			<div ng-click="games.changePage(1)" class="intro-div new-game">
+				<h1>Start New Game</h1>
+			</div>
+			<div class="intro-div join-game" ng-click="games.changePage(3)">
+				<h1>Join Existing Game</h1>
+			</div>
 		</div>
-		<div class="intro-div join-game" ng-click="games.startNewGame()">
-			<h1>Join Existing Game</h1>
+		<div class="new-game-page" ng-switch-when="1">
+			<div class="new-game-page-div">
+				<form ng-submit="games.changePage(4); games.makePlayers(); games.addGame(games.player1Name, games.gameName)">
+				<h1>Enter your name:</h1>
+				<input type="text" ng-model="games.player1Name" placeholder="Enter your name" required="">
+				<h1>Pick a name for your game:</h1>
+				<input type="text" ng-model="games.gameName" placeholder="Enter game name" required="">
+				<button class="pink-button">Go!</button>
+				</form>
+			</div>
 		</div>
-	</div>
-	<div class="container-fluid" ng-switch-when="1">
-		<div ng-class="{active: games.player1.turn}" class="player-stats">
-			<h1>{{games.player1.name}}</h1>
-			<h1>{{games.player1.wins}}</h1>
-			<div class="x-marker">X</div>
+		<div class="new-game-page" ng-switch-when="3">
+			<div class="new-game-page-div">
+				<form ng-submit="games.changePage(4); games.makePlayers();">
+				<h1>Enter your name:</h1>
+				<input type="text" ng-model="games.player2Name" placeholder="Enter your name" required="">
+				<h1>Select the game you wish to join:</h1>
+				<button class="pink-button">Go!</button>
+				</form>
+			</div>
 		</div>
-		<div ng-class="{active: games.player2.turn}" class="player-stats">
-			<h1>{{games.player2.name}}</h1>
-			<h1>{{games.player2.wins}}</h1>
-			<div class="o-marker">O</div>
-		</div>
-		<div class="game-title">
-			<h1>My Game Name</h1>
-		</div>
+		<div ng-switch-when="4">
+			<div ng-class="{active: games.player1.turn}" class="player-stats">
+				<h1>{{games.player1.name}}</h1>
+				<h1>{{games.player1.wins}}</h1>
+				<div class="x-marker">X</div>
+			</div>
+			<div ng-class="{active: games.player2.turn}" class="player-stats">
+				<h1>{{games.player2.name}}</h1>
+				<h1>{{games.player2.wins}}</h1>
+				<div class="o-marker">O</div>
+			</div>
+			<div class="game-title">
+				<h1>{{games.gameName | limitTo: 18}}</h1>
+			</div>
 
 
 			<div class="tic-tac-toe-container">
@@ -39,62 +61,62 @@
 				</div>
 			</div>
 
-		<div class="chat">
-		</div>
+			<div class="chat">
+			</div>
 
 
 
 
 
 
+			<div id="one" class="circle"></div>
+			<div id="two" class="circle"></div>
+			<div id="three" class="circle"></div>
+			<div id="four" class="circle"></div>
+			<div id="five" class="circle"></div>
+			<div id="centercircle"></div>
 
-
-		<div id="one" class="circle"></div>
-		<div id="two" class="circle"></div>
-		<div id="three" class="circle"></div>
-		<div id="centercircle"></div>
-
-			 <svg id="fish" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+			<svg id="fish" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 				 width="265.051px" height="154.312px" viewBox="302.449 241.844 265.051 154.312"
 				 enable-background="new 302.449 241.844 265.051 154.312" xml:space="preserve">
-			<path fill="#895881" d="M302.449,319c21-84,162.666-109.667,194.104-25.004L567.5,249.5L553.115,319 M529,319h24.116l9.384,71.5
-				l-65.946-46.496C465.115,428.666,323.449,403,302.449,319"/>
-			<g>
-				<circle fill="#FFFFFF" cx="362.455" cy="310.675" r="32.333"/>
-				<circle fill="#231F20" cx="359.121" cy="310.676" r="18.333"/>
-			</g>
-			<path fill="none" stroke="#574053" stroke-width="6" stroke-miterlimit="10" d="M413.906,341.939L461.5,365l-10.25-45.104
-				L464.5,274.5l-50.594,21.562 M430.783,306l26.274-6 M430.486,331.5l25.104,7.492"/>
-			<path id="mouth" fill="#352733" d="M304.318,319.021c9.815,1.136,39.065,31.886,22.184,39.872C321.684,361.175,295.284,317.976,304.318,319.021
-				z"/>
-		</svg>
+				<path fill="#895881" d="M302.449,319c21-84,162.666-109.667,194.104-25.004L567.5,249.5L553.115,319 M529,319h24.116l9.384,71.5
+					l-65.946-46.496C465.115,428.666,323.449,403,302.449,319"/>
+				<g>
+					<circle fill="#FFFFFF" cx="362.455" cy="310.675" r="32.333"/>
+					<circle fill="#231F20" cx="359.121" cy="310.676" r="18.333"/>
+				</g>
+				<path fill="none" stroke="#574053" stroke-width="6" stroke-miterlimit="10" d="M413.906,341.939L461.5,365l-10.25-45.104
+					L464.5,274.5l-50.594,21.562 M430.783,306l26.274-6 M430.486,331.5l25.104,7.492"/>
+				<path id="mouth" fill="#352733" d="M304.318,319.021c9.815,1.136,39.065,31.886,22.184,39.872C321.684,361.175,295.284,317.976,304.318,319.021
+					z"/>
+			</svg>
 
-		<svg id="seahorse" version="1.1" id="Layer_2" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-			 width="282.725px" height="445.986px" viewBox="0 0 282.725 445.986" enable-background="new 0 0 282.725 445.986"
-			 xml:space="preserve">
-		<path fill="#00D6BB" d="M123.9,38.8V6c11.516,15,48.161-6,48.161-6c9.07,40.113,46.937,25,46.937,25c-3,31,27.5,40.5,27.5,40.5
-			c-22.5,27.5,9.323,47,9.323,47c-29.445,12.5-14.323,45-14.323,45c-25.5,6-41,43-41,43L123.9,38.8z"/>
-		<path fill="#FFF764" d="M0.001,170c0.222,8.382,9.768,38.606,17.998,37c10.197-1.989,67.6-70,89-70c15,0,19.167,18.099,20,25
-			c2.763,22.9-50.061,59.957-34,100c12.778,31.858,84.978,62.493,74.994,113.489c-4.994,25.511-28.558,29.345-40.498,26.999
-			c-15.104-2.968-38.13-38.589-27.263-49.491c7.128-7.151,17.151,28.003,29.767,24.003c20.093-6.37,5.717-45-19-59
-			c-17.489-9.906-43.047,9.916-47.333,39.667c-5.667,39.333,30.333,88.327,89.328,88.319c28.111-0.004,71.695-21.885,77.996-80.996
-			C235.999,318,191.864,259.188,200.999,222c6.927-28.199,24.975-83.132,17-125c-8-42-42.834-74.381-81.77-62.989
-			C84.999,49,97.409,96.669,80.741,112.943C67.667,125.708-0.29,159,0.001,170z"/>
-		<g>
-			<circle id="seahorse-eye-white" fill="#FFFFFF" cx="143.721" cy="89.238" r="28.333"/>
-			<circle id="seahorse-eye-black" fill="#231F20" cx="135.716" cy="91.625" r="18.333"/>
-		</g>
-		<path fill="#00D6BB" d="M158.725,219.773c19.742-17.833,124-49,124-49c-36.06,23.894-5.727,45.227-5.727,45.227
-			c-30.06,24.226-3.606,50.44-3.606,50.44c-28.06,12.227-10.667,40.478-10.667,40.478c-31.172-5.549-94.09-32.646-105-46.645
-			C150.96,251.593,146.665,230.667,158.725,219.773z"/>
-		<path fill="none" stroke="#2E897C" stroke-width="7" stroke-linecap="round" stroke-miterlimit="10" d="M237.348,275.105
-			c0,0-39.055-13.197-50.369-24.864c-2.319-2.391-6.654-6.333-2.218-16c4.462-9.723,62.795-24.984,62.795-24.984 M231.959,241.355
-			l-48.764-2.602"/>
-		</svg>
+			<svg id="seahorse" version="1.1" id="Layer_2" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+				 width="282.725px" height="445.986px" viewBox="0 0 282.725 445.986" enable-background="new 0 0 282.725 445.986"
+				 xml:space="preserve">
+				<path fill="#00D6BB" d="M123.9,38.8V6c11.516,15,48.161-6,48.161-6c9.07,40.113,46.937,25,46.937,25c-3,31,27.5,40.5,27.5,40.5
+					c-22.5,27.5,9.323,47,9.323,47c-29.445,12.5-14.323,45-14.323,45c-25.5,6-41,43-41,43L123.9,38.8z"/>
+				<path fill="#FFF764" d="M0.001,170c0.222,8.382,9.768,38.606,17.998,37c10.197-1.989,67.6-70,89-70c15,0,19.167,18.099,20,25
+					c2.763,22.9-50.061,59.957-34,100c12.778,31.858,84.978,62.493,74.994,113.489c-4.994,25.511-28.558,29.345-40.498,26.999
+					c-15.104-2.968-38.13-38.589-27.263-49.491c7.128-7.151,17.151,28.003,29.767,24.003c20.093-6.37,5.717-45-19-59
+					c-17.489-9.906-43.047,9.916-47.333,39.667c-5.667,39.333,30.333,88.327,89.328,88.319c28.111-0.004,71.695-21.885,77.996-80.996
+					C235.999,318,191.864,259.188,200.999,222c6.927-28.199,24.975-83.132,17-125c-8-42-42.834-74.381-81.77-62.989
+					C84.999,49,97.409,96.669,80.741,112.943C67.667,125.708-0.29,159,0.001,170z"/>
+				<g>
+					<circle id="seahorse-eye-white" fill="#FFFFFF" cx="143.721" cy="89.238" r="28.333"/>
+					<circle id="seahorse-eye-black" fill="#231F20" cx="135.716" cy="91.625" r="18.333"/>
+				</g>
+				<path fill="#00D6BB" d="M158.725,219.773c19.742-17.833,124-49,124-49c-36.06,23.894-5.727,45.227-5.727,45.227
+					c-30.06,24.226-3.606,50.44-3.606,50.44c-28.06,12.227-10.667,40.478-10.667,40.478c-31.172-5.549-94.09-32.646-105-46.645
+					C150.96,251.593,146.665,230.667,158.725,219.773z"/>
+				<path fill="none" stroke="#2E897C" stroke-width="7" stroke-linecap="round" stroke-miterlimit="10" d="M237.348,275.105
+					c0,0-39.055-13.197-50.369-24.864c-2.319-2.391-6.654-6.333-2.218-16c4.462-9.723,62.795-24.984,62.795-24.984 M231.959,241.355
+					l-48.764-2.602"/>
+			</svg>
 
 
 
-	 </div>
+		 </div> <!-- end main game page div -->
 
 
 
@@ -156,15 +178,18 @@
 			<div id="modal">
 				<h1><span id="winnerSpan"></span> is the winner!</h1>
 				<h1>Do you want to play again?</h1>
-				<button ng-click="games.clearBoard()">Yes</button>
-				<button>No</button>
+				<button class="pink-button" ng-click="games.clearBoard()">Yes</button>
+				<button class="pink-button" >No</button>
 			</div>
 		</div>
+	</div>
 
-
- 	<script type="text/javascript" src="bower_components/angularjs/angular.min.js"></script>
+ 	<script type="text/javascript" src="js/angular.js"></script>
+ 	<script type="text/javascript" src="js/firebase.js"></script>
+ 	<script type="text/javascript" src="js/angularfire.js"></script>
  	<script type="text/javascript" src="js/main.js"></script>
  	<script type="text/javascript" src="js/GamesController.js"></script>
+ 	<script type="text/javascript" src="js/gameadder.js"></script>
 
 </body>
 </html>

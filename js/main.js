@@ -1,3 +1,3 @@
 (function() {
-	angular.module("TicTacToeApp", []);
+	angular.module("TicTacToeApp", ['firebase']);
 })();
