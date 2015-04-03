@@ -1,0 +1,90 @@
+@media (max-width: 992px) {
+	body {
+	}
+	.game-title {
+		font-size: 1.3em;
+		padding-left: 0;
+		padding-right: 0;
+		margin-left: 390px;
+		width: 46.5%;
+	}
+	.game-title h1 {
+		margin: 34px 0;
+	}
+
+	.player-stats {
+		margin-left: 30px;
+	}
+
+	.tic-tac-toe-container {
+		margin-left: 386px;
+	}
+}
+
+@media (max-width: 768px) {
+	body {
+		text-align: center;
+
+	}
+
+	.player-stats {
+		position: static;
+		width: 49%;
+		margin: 0;
+		margin-top: 5px;
+		display: inline-block;
+		border-radius: 10px;
+		text-align: right;
+		border-radius: 0;
+	}
+
+	.x-marker, .o-marker {
+		position: relative;
+		top: -80px;
+		left: -110px;
+		font-size: 7em;
+	}
+
+	.player-stats h1 {
+		padding-right: 10px;
+	}
+
+	.player-stats:nth-child(2) {
+		margin-top: 0;
+	}
+
+	.tic-tac-toe-container {
+		position: static;
+		width: 90%;
+		margin: 0 auto;
+	}
+
+	.game-title {
+		position: static;
+		max-width: 100%;
+		border-radius: 0;
+		height: 100px;
+		width: 100%;
+		margin: 0 auto;
+		margin-top: -60px;
+		margin-bottom: 4px;
+		border: 3px solid rgba(106,201,205,.8)
+
+	}
+
+	.game-title h1 {
+		padding-top: 22px;
+		font-size: 2.2em;
+		position: static;
+		margin: 0;
+	}
+
+	#seahorse {
+		display: none;
+	}
+
+	#centercircle {
+		display: none;
+	}
+
+}

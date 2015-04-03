@@ -7,61 +7,67 @@
 	<link href='http://fonts.googleapis.com/css?family=Nunito' rel='stylesheet' type='text/css'>
 	<link rel="stylesheet" type="text/css" href="css/animations.css">
 	<link rel="stylesheet" type="text/css" href="css/style.css">
+	<link rel="stylesheet" type="text/css" href="css/mediaqueries.css">
 </head>
-<body ng-controller="GamesController as games">
-	<div ng-switch="games.pageDisplay" class="ui grid">
+<body ng-controller="PagesController as pg">
+	<div ng-controller="GamesController as gc" ng-switch="pg.pageDisplay" class="ui grid">
 		<div class="first-page" ng-switch-default>
-			<div ng-click="games.changePage(1)" class="intro-div new-game">
+			<div ng-click="pg.changePage(1); gc.initNewGame()" class="intro-div new-game">
 				<h1>Start New Game</h1>
 			</div>
-			<div class="intro-div join-game" ng-click="games.changePage(3)">
+			<div class="intro-div join-game" ng-click="pg.changePage(3)">
 				<h1>Join Existing Game</h1>
 			</div>
 		</div>
 		<div class="new-game-page" ng-switch-when="1">
 			<div class="new-game-page-div">
-				<form ng-submit="games.changePage(4); games.makePlayers(); games.addGame(games.player1Name, games.gameName)">
+				<form ng-submit="pg.changePage(5); gc.makePlayer1()">
 				<h1>Enter your name:</h1>
-				<input type="text" ng-model="games.player1Name" placeholder="Enter your name" required="">
+				<input type="text" ng-model="gc.games.player1.name" placeholder="Enter your name" required="">
 				<h1>Pick a name for your game:</h1>
-				<input type="text" ng-model="games.gameName" placeholder="Enter game name" required="">
+				<input type="text" ng-model="gc.games.gameName" placeholder="Enter game name" required="">
 				<button class="pink-button">Go!</button>
 				</form>
 			</div>
 		</div>
 		<div class="new-game-page" ng-switch-when="3">
 			<div class="new-game-page-div">
-				<form ng-submit="games.changePage(4); games.makePlayers();">
-				<h1>Enter your name:</h1>
-				<input type="text" ng-model="games.player2Name" placeholder="Enter your name" required="">
+				<form ng-submit="pg.changePage(4); gc.joinGame()">
 				<h1>Select the game you wish to join:</h1>
+				<h2 ng-repeat="game in gc.gamesList" class = "game-list-item" ng-class="{clickeditem:clicked}" ng-click="clicked=true; gc.getId(game.id)">{{game.gameName}}</h2>
 				<button class="pink-button">Go!</button>
 				</form>
 			</div>
 		</div>
-		<div ng-switch-when="4">
-			<div ng-class="{active: games.player1.turn}" class="player-stats">
-				<h1>{{games.player1.name}}</h1>
-				<h1>{{games.player1.wins}}</h1>
+		<div class="new-game-page" ng-switch-when="4">
+			<div class="new-game-page-div">
+				<form ng-submit="pg.changePage(5); gc.makePlayer2()">
+				<h1>Enter your name:</h1>
+				<input type="text" ng-model="gc.games.player2.name" placeholder="Enter your name" required="">
+				<button class="pink-button">Go!</button>
+				</form>
+			</div>
+		</div>
+		<div ng-switch-when="5">
+			<div ng-class="{active: gc.games.player1.turn}" class="player-stats">
+				<h1>{{gc.games.player1.name}}</h1>
+				<h1>{{gc.games.player1.wins}}</h1>
 				<div class="x-marker">X</div>
 			</div>
-			<div ng-class="{active: games.player2.turn}" class="player-stats">
-				<h1>{{games.player2.name}}</h1>
-				<h1>{{games.player2.wins}}</h1>
+			<div ng-class="{active: gc.games.player2.turn}" class="player-stats">
+				<h1>{{gc.games.player2.name}}</h1>
+				<h1>{{gc.games.player2.wins}}</h1>
 				<div class="o-marker">O</div>
 			</div>
 			<div class="game-title">
-				<h1>{{games.gameName | limitTo: 18}}</h1>
+				<h1>{{gc.games.gameName | limitTo: 18}}</h1>
 			</div>
 
 
 			<div class="tic-tac-toe-container">
-				<div ng-repeat="square in games.board"  ng-click="games.makeMove($index)" class="game-square">
+				<div ng-repeat="square in gc.games.gameboard" ng-click="gc.makeMove($index)" class="game-square">
 					{{square.marked}}
 				</div>
-			</div>
-
-			<div class="chat">
 			</div>
 
 
@@ -74,6 +80,9 @@
 			<div id="three" class="circle"></div>
 			<div id="four" class="circle"></div>
 			<div id="five" class="circle"></div>
+			<div id="six" class="circle"></div>
+			<div id="seven" class="circle"></div>
+			<div id="eight" class="circle"></div>
 			<div id="centercircle"></div>
 
 			<svg id="fish" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
@@ -90,6 +99,31 @@
 				<path id="mouth" fill="#352733" d="M304.318,319.021c9.815,1.136,39.065,31.886,22.184,39.872C321.684,361.175,295.284,317.976,304.318,319.021
 					z"/>
 			</svg>
+
+			<svg id="fish2" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+				 width="312.667px" height="130.264px" viewBox="0 0 312.667 130.264" enable-background="new 0 0 312.667 130.264"
+				 xml:space="preserve">
+				<g id="Layer_1">
+					<polyline fill="#F4BB3A" points="143,26.229 181,0 258,13.114 228,47 	"/>
+					<polyline fill="#F4BB3A" points="143,106.38 209,130.264 243,109.264 223.5,89.264 	"/>
+					<path fill="#F8DB94" d="M7.333,65.281c0-3.129,20.2-26.008,49.334-34.583C95.998,19.122,189.209,21.178,226,39.273
+						c21.833,10.739,26,15.758,26,15.758l60.667-28v76.5l-60.667-24c0,0-16.616,12.78-23,16
+						c-39.286,19.814-132.596,16.758-174.741,4.114C24.259,90.646,7.333,72.031,7.333,65.281z"/>
+					<polyline fill="#F4BB3A" points="114.418,81.253 185.918,92.253 197,40.365 114.418,57.658 	"/>
+					<g>
+						<circle fill="#FFFFFF" cx="64.754" cy="57.658" r="22.428"/>
+						<circle fill="#231F20" cx="62.441" cy="57.658" r="12.716"/>
+					</g>
+				</g>
+				<g id="Layer_2">
+					<polygon fill="#F4BB3A" points="252,55.031 312.667,27.031 312.667,103.531 252,79.531 267,66.434 	"/>
+					<path id="mouth" fill="#4C4A4C" d="M7.648,64.403c5.169-3.859,13.627,0.127,17,2.75c3.433,2.67,4.352,12.211-0.315,16.878
+						c-0.974,0.975-6.875-2.68-11.333-7.75C8.889,71.605,6.085,65.571,7.648,64.403z"/>
+				</g>
+			</svg>
+
+
+
 
 			<svg id="seahorse" version="1.1" id="Layer_2" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 				 width="282.725px" height="445.986px" viewBox="0 0 282.725 445.986" enable-background="new 0 0 282.725 445.986"
@@ -174,12 +208,12 @@
 		</svg>
 
 
-		<div id="overlay">
+		<div ng-if="gc.games.display" id="overlay">
 			<div id="modal">
-				<h1><span id="winnerSpan"></span> is the winner!</h1>
+				<h1>{{gc.games.winner}} is the winner!</h1>
 				<h1>Do you want to play again?</h1>
-				<button class="pink-button" ng-click="games.clearBoard()">Yes</button>
-				<button class="pink-button" >No</button>
+				<button class="pink-button" ng-click="gc.clearBoard()">Yes</button>
+				<button class="pink-button" ng-click="pg.changePage(0); gc.endGame()">No</button>
 			</div>
 		</div>
 	</div>
@@ -189,7 +223,7 @@
  	<script type="text/javascript" src="js/angularfire.js"></script>
  	<script type="text/javascript" src="js/main.js"></script>
  	<script type="text/javascript" src="js/GamesController.js"></script>
- 	<script type="text/javascript" src="js/gameadder.js"></script>
+ 	<script type="text/javascript" src="js/PagesController.js"></script>
 
 </body>
 </html>

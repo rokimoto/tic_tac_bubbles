@@ -18,9 +18,9 @@
 	0% {
 		bottom: 0;
 	}
-	40% {
-			bottom: 800px;
-		}
+	60% {
+		bottom: 105%;
+	}
 }
 
 
@@ -57,27 +57,52 @@
 
 
 @-webkit-keyframes swimleft {
+	20% {
+			right: 10%;
+		}
 	50% {
-			left: 20%;
+			right: 55%;
+		}
+	80% {
+			right: 100%;
 		}
 	100% {
-			left: -50%;
+			right: 100%;
+		}
+}
+
+@-webkit-keyframes swimleft2 {
+	20% {
+			right: 5%;
+		}
+	50% {
+			right: 20%;
+		}
+	60% {
+			right: 40%;
+		}
+	100% {
+			right: 100%;
 		}
 }
 @-webkit-keyframes swimright {
-	30% {
-			left: 10%;
+
+	20% {
+			left: 35%;
 		}
 	60% {
-			left: 50%;
+			left: 58%;
 		}
+	80% {
+			left: 100%;
+	}
 	100% {
-			left: 120%;
+			left: 100%;
 		}
 }
 
 /*--------------------------------
-        Blinking Eye
+        SEAHORSE
 --------------------------------*/
 
 @-webkit-keyframes blink { 
@@ -91,7 +116,26 @@
 }
 
 @-webkit-keyframes sway { 
-  50% { -webkit-transform: rotate(-10deg);} 
-  100% { -webkit-transform: rotate(5deg);}
+	40% { 
+		top: 50px;
+	}
+  	50% { 
+  		-webkit-transform: rotate(-12deg);
+  	} 
+  	100% { 
+  		-webkit-transform: rotate(5deg);
+  	}
+}
+
+@-webkit-keyframes swaysmall { 
+	40% { 
+		top: 240px;
+	}
+  	50% { 
+  		-webkit-transform: rotate(-8deg);
+  	} 
+  	100% { 
+  		-webkit-transform: rotate(5deg);
+  	}
 }
 

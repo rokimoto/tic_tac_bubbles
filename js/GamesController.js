@@ -3,59 +3,126 @@
 		.module("TicTacToeApp")
 		.controller("GamesController", GamesController);
 
-	GamesController.$inject = ['$firebaseObject', '$firebaseArray'];
+	GamesController.$inject = ['$firebaseArray', '$firebaseObject'];
 
-	function GamesController($firebaseObject, $firebaseArray) {
+	function GamesController($firebaseArray, $firebaseObject) {
 		var self = this;
-		var overlay = document.getElementById('overlay');
-		var winnerSpan = document.getElementById('winnerSpan');
-		self.init = init;
+
+		// variable thats holding object from firebase
+		self.games;
+
+		// game functions
+		self.initNewGame = initNewGame;
+		self.joinGame = joinGame;
 		self.makeMove = makeMove;
 		self.clearBoard = clearBoard;
-		self.changePage = changePage;
-		self.board = [];
-		self.turns = 0;
-		self.player1;
-		self.player2;
-		self.gameName = null;
-		self.makePlayers = makePlayers;
+		self.makePlayer1 = makePlayer1;
+		self.makePlayer2 = makePlayer2;
+		self.endGame = endGame;
+		self.id;
 
-		// keeps track of what page the user is seeing
-		self.pageDisplay;
+		self.gamesList;
+		getGameList();
 
-		/***************************
-		 *      INITIALIZERS       *
-		 ***************************/
+		self.getId = getId;
 
-		// initializes game
-		function init() {
-			makeBoard();
-			makePlayers();
-			self.player1.turn = true;
+
+		// gets game object from firebase
+		function getGames() {
+			console.log("get new game");
+			var idGen = Math.round(Math.random() * 10000);
+			self.id = idGen;
+			var ref = "https://tictacfish.firebaseio.com/" + idGen;
+		  	ref = new Firebase(ref);
+		  	var games = $firebaseObject(ref);
+		  	return games;
 		}
+		
+		var gameListArray = [];
+		function getGameList() {
+			var ref = new Firebase("https://tictacfish.firebaseio.com/");
+			ref = $firebaseObject(ref);
+			// Retrieve new posts as they are added to Firebase
+			// ref.on("value", function(snapshot) {
+		 //  		var newPost = snapshot.val();
+		 //  		for (prop in newPost) {
+   //  				gameListArray.push(prop);
+   //  				console.log("inside for " + gameListArray);
+			// 	}
+			// });
+			self.gamesList = ref;
+		}
+
+
+		function initNewGame() {
+			self.games = getGames();
+		}
+
+		function getJoinGames() {
+			var ref = "https://tictacfish.firebaseio.com/" + self.id;
+		  	ref = new Firebase(ref);
+		  	var games = $firebaseObject(ref);
+		  	return games;
+		}
+
+
+		function joinGame() {
+			self.games = getJoinGames();
+		}
+
+		function getId(id) {
+			self.id = id;
+			console.log(id);
+		}
+
+
+
+		// creates gameboard
+		var gameboard = [];
+		makeBoard();
+
+		// html elements for manipulation
+		var overlay = document.getElementById('overlay');
+		var winnerSpan = document.getElementById('winnerSpan');
+
+
+		// /***************************
+		//  *      INITIALIZERS       *
+		//  ***************************/
 
 		// makes gameboard
 		function makeBoard() {
 			for (var i = 0; i < 9; i++) {
-				self.board.push( new Square() );
+				gameboard.push( new Square() );
 			}
 		}
 
-		// creates 2 players
-		function makePlayers() {
-			/*
-			self.player1 = new Player(getName());
-			self.player2 = new Player(getName());
-			*/
-			self.player1 = new Player(self.player1Name, "X", true);
-			self.player2 = new Player(self.player2Name, "O", false);
+		// creates player1 and new game
+		function makePlayer1() {
+			var player1 = new Player(self.games.player1.name, "X", true);
+			self.games.player1 = player1;	
+			self.games.id = self.id;
+			self.games.gameboard = gameboard;
+			self.games.display = false;
+			self.games.$save();
 		}
 
-		/***************************
-		 *  Constructor Functions  *
-		 ***************************/
+		// creates player 2
+		function makePlayer2(gameid) {
+			console.log(self.games);
+			console.log(self.games.player2);
+			console.log(self.games.player2.name);
+			var player2 = new Player(self.games.player2.name, "O", false);
+			self.games.player2 = player2;
+			self.games.player
+			self.games.$save();
+		}
 
-		// game square constructor
+		// /***************************
+		//  *  Constructor Functions  *
+		//  ***************************/
+
+		// // game square constructor
 		function Square() {
 			// checks if square has already been played
 			this.beenClicked = false;
@@ -63,167 +130,153 @@
 			this.marked = "";
 		}
 
-		// player constructor 
+		// // player constructor 
 		function Player(name, symbol, turn) {
 			this.wins = 0;
-			this.makeMove = makeMove;
 			this.name = name;
 			this.symbol = symbol;
 			this.turn = turn;
 		}
 
-		/***************************
-		 *      User Functions     *
-		 ***************************/
+		// /***************************
+		//  *      User Functions     *
+		//  ***************************/
 
+		// makes player move
 		function makeMove(index) {
 			var winner;
-			var playerSymbol;
-			var thisSquare = self.board[index];
+			var thisSquare = self.games.gameboard[index];
 			
 			if (thisSquare.beenClicked) {
 				alert("ALREADY BEEN CLICKED");
 			}
 
-			else if (self.turns % 2 === 0) {
-				playerSymbol = self.player1.symbol;
-				updateSquare(thisSquare, playerSymbol);
-				winner = checkForWinner(playerSymbol);
+			else if (self.games.player1.turn) {
+	
+				thisSquare.marked = "X";
+				thisSquare.beenClicked = true;
+		
+
+				winner = checkForWinner("X");
 				if (winner) {
-					self.player1.wins++;
-					restartGame(self.player1.name);
+					self.games.player1.wins++;
+				
+					restartGame(self.games.player1.name);
 				}
 				else {
 					checkForTie();
 				}
-				self.player1.turn = false;
-				self.player2.turn = true;
+				self.games.player1.turn = false;
+				self.games.player2.turn = true;
+				self.games.$save();
 			}
 			else {
-				playerSymbol = self.player2.symbol;
-				updateSquare(thisSquare, playerSymbol);
 
-				winner = checkForWinner(playerSymbol);
+
+				thisSquare.marked = "O";
+				thisSquare.beenClicked = true;
+
+				winner = checkForWinner("O");
 				if (winner) {
-					self.player2.wins++;
-					restartGame(self.player2.name);
+					self.games.player2.wins++;
+					restartGame(self.games.player2.name);
 				}
 				else {
 					checkForTie();
 				}
-				self.player2.turn = false;
-				self.player1.turn = true;
+				self.games.player2.turn = false;
+				self.games.player1.turn = true;
+				self.games.$save();
 			}
+			
 		}
 
-		function updateSquare(square, player) {
-			square.marked = player;
-			square.beenClicked = true;
-			self.turns++;
-		}
 
-		// change this to retrieve value of input box
-		function getName() {
-			var name = prompt("What is your name?");
-			return name;
-		}
+		// **************************
+		//  *  HIDDEN COMPUTER FUNCS  *
+		//  **************************
 
-		/***************************
-		 *  HIDDEN COMPUTER FUNCS  *
-		 ***************************/
-
-		// changes page to new game
-		function changePage(page) {
-			self.pageDisplay = page;
-		}
-
-		// asks user if they want to restart game
+		// // asks user if they want to restart game
 		function restartGame(winnerName) {
 			setTimeout(function() {
-				winnerSpan.innerHTML = winnerName;
-				overlay.style.visibility="visible";
+				self.games.winner = winnerName;
+				self.games.display = true;
+				self.games.$save();
 			}, 1000);
 		}
 
 		// clears board 
 		function clearBoard() {
 			for (var i = 0; i < 9; i++) {
-				self.board[i].marked = "";
-				self.board[i].beenClicked = false;
+				self.games.gameboard[i].marked = "";
+				self.games.gameboard[i].beenClicked = false;
 			}
-			overlay.style.visibility="hidden";
-			console.log(self.board);
+			self.games.display = false;
+			self.games.$save();
 		}
 
-		// checks for tie
+		function endGame() {
+			self.games.$remove();
+
+		}
+
+
+		// // checks for tie
 		function checkForTie() {
 			var checkedSquareCount = 0;
 			for (var i = 0; i < 9; i++) {
-				if(self.board[i].marked !== "") {
+				if(self.games.gameboard[i].marked !== "") {
 					checkedSquareCount += 1;
 				}
 			}
 			if (checkedSquareCount > 8) {
 				restartGame("No one");
 			}
-			console.log(checkedSquareCount);
 		}
 
 		// checks for winner
 		function checkForWinner (player) {
 			var winner;
-			if (self.board[0].marked == player) {
-				if (self.board[1].marked == player && self.board[2].marked == player) {
+			if (self.games.gameboard[0].marked == player) {
+				if (self.games.gameboard[1].marked == player && self.games.gameboard[2].marked == player) {
 					winner = player;
 				}
-				if (self.board[3].marked == player && self.board[6].marked == player) {
+				if (self.games.gameboard[3].marked == player && self.games.gameboard[6].marked == player) {
 					winner = player;
 				}
-				if (self.board[4].marked == player && self.board[8].marked == player) {
+				if (self.games.gameboard[4].marked == player && self.games.gameboard[8].marked == player) {
 					winner = player;
 				}
 			}
-			else if (self.board[1].marked == player) {			
-				if (self.board[4].marked == player && self.board[7].marked == player) {
+			else if (self.games.gameboard[1].marked == player) {			
+				if (self.games.gameboard[4].marked == player && self.games.gameboard[7].marked == player) {
 					winner = player;
 				}
 			}
 
-			else if (self.board[2].marked == player) {
-				if (self.board[5].marked == player && self.board[8].marked == player) {
+			else if (self.games.gameboard[2].marked == player) {
+				if (self.games.gameboard[5].marked == player && self.games.gameboard[8].marked == player) {
 					winner = player;
 				}	
-				if (self.board[4].marked == player && self.board[6].marked == player) {
+				if (self.games.gameboard[4].marked == player && self.games.gameboard[6].marked == player) {
 					winner = player;
 				}
 			}
 
-			else if (self.board[3].marked == player) {
-				if (self.board[4].marked == player && self.board[5].marked == player) {
+			else if (self.games.gameboard[3].marked == player) {
+				if (self.games.gameboard[4].marked == player && self.games.gameboard[5].marked == player) {
 					winner = player;
 				}
 			}
 
-			else if (self.board[6].marked == player) {
-				if (self.board[7].marked == player && self.board[8].marked == player) {
+			else if (self.games.gameboard[6].marked == player) {
+				if (self.games.gameboard[7].marked == player && self.games.gameboard[8].marked == player) {
 					winner = player;
 				}
 			}
 			return winner;
 		}
 
-		/***************************
-		 *        FIREBASE        *
-		 ***************************/
-
-
-
-
-
-		// change init call to button later and remove
-		init();
 	}
-
-
 
 })();
