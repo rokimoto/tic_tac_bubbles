@@ -3,13 +3,13 @@
 		.module("TicTacToeApp")
 		.controller("GamesController", GamesController);
 
-	GamesController.$inject = ['$firebaseArray', '$firebaseObject'];
+	GamesController.$inject = ['$firebaseArray','$firebaseObject'];
 
 	function GamesController($firebaseArray, $firebaseObject) {
 		var self = this;
 
 		// variable thats holding object from firebase
-		self.games;
+		self.games = {};
 
 		// game functions
 		self.initNewGame = initNewGame;
@@ -19,15 +19,28 @@
 		self.makePlayer1 = makePlayer1;
 		self.makePlayer2 = makePlayer2;
 		self.endGame = endGame;
-		self.id;
+		self.id = null;
 
-		self.gamesList;
-		getGameList();
+		self.gamesList = getGameList();
 
 		self.getId = getId;
 
 
-		// gets game object from firebase
+		self.toggelHighlight = toggelHighlight;
+		function toggelHighlight(index) {
+			var game = self.gamesList[index];
+			if (!game.highlighted) {
+				for(var i = 0; i < self.gamesList.length; i++) {
+					self.gamesList[i].highlighted = false;
+					game.highlighted = true;
+				}
+			}
+			else {
+				game.highlighted = false;
+			}
+		}
+
+		// gets game object from firebase when creating new game
 		function getGames() {
 			console.log("get new game");
 			var idGen = Math.round(Math.random() * 10000);
@@ -38,26 +51,19 @@
 		  	return games;
 		}
 		
-		var gameListArray = [];
+		// gets list of games to display when picking game to join
 		function getGameList() {
 			var ref = new Firebase("https://tictacfish.firebaseio.com/");
-			ref = $firebaseObject(ref);
-			// Retrieve new posts as they are added to Firebase
-			// ref.on("value", function(snapshot) {
-		 //  		var newPost = snapshot.val();
-		 //  		for (prop in newPost) {
-   //  				gameListArray.push(prop);
-   //  				console.log("inside for " + gameListArray);
-			// 	}
-			// });
-			self.gamesList = ref;
+			ref = $firebaseArray(ref);
+			return ref;
 		}
 
-
+		// initializes new game on button click
 		function initNewGame() {
 			self.games = getGames();
 		}
 
+		// gets game object from firebase when joining game
 		function getJoinGames() {
 			var ref = "https://tictacfish.firebaseio.com/" + self.id;
 		  	ref = new Firebase(ref);
@@ -65,17 +71,16 @@
 		  	return games;
 		}
 
-
+		// initializes the joining of game on button click
 		function joinGame() {
 			self.games = getJoinGames();
 		}
 
+		// gets ID of game to join
 		function getId(id) {
 			self.id = id;
 			console.log(id);
 		}
-
-
 
 		// creates gameboard
 		var gameboard = [];
@@ -101,6 +106,8 @@
 		function makePlayer1() {
 			var player1 = new Player(self.games.player1.name, "X", true);
 			self.games.player1 = player1;	
+			self.games.inPlay = false;
+			self.games.highlighted = false;
 			self.games.id = self.id;
 			self.games.gameboard = gameboard;
 			self.games.display = false;
@@ -114,6 +121,7 @@
 			console.log(self.games.player2.name);
 			var player2 = new Player(self.games.player2.name, "O", false);
 			self.games.player2 = player2;
+			self.games.inPlay = true;
 			self.games.player
 			self.games.$save();
 		}
@@ -142,6 +150,13 @@
 		//  *      User Functions     *
 		//  ***************************/
 
+		// function checkForTurn() {
+		// 	if (self.turn === self.games.player1.turn) {
+		// 		makeMove(index)
+		// 		self.turn = !self.turn;
+		// 	}
+		// }
+
 		// makes player move
 		function makeMove(index) {
 			var winner;
@@ -152,11 +167,8 @@
 			}
 
 			else if (self.games.player1.turn) {
-	
 				thisSquare.marked = "X";
 				thisSquare.beenClicked = true;
-		
-
 				winner = checkForWinner("X");
 				if (winner) {
 					self.games.player1.wins++;
@@ -170,9 +182,8 @@
 				self.games.player2.turn = true;
 				self.games.$save();
 			}
+
 			else {
-
-
 				thisSquare.marked = "O";
 				thisSquare.beenClicked = true;
 
@@ -253,7 +264,6 @@
 					winner = player;
 				}
 			}
-
 			else if (self.games.gameboard[2].marked == player) {
 				if (self.games.gameboard[5].marked == player && self.games.gameboard[8].marked == player) {
 					winner = player;
@@ -262,13 +272,11 @@
 					winner = player;
 				}
 			}
-
 			else if (self.games.gameboard[3].marked == player) {
 				if (self.games.gameboard[4].marked == player && self.games.gameboard[5].marked == player) {
 					winner = player;
 				}
 			}
-
 			else if (self.games.gameboard[6].marked == player) {
 				if (self.games.gameboard[7].marked == player && self.games.gameboard[8].marked == player) {
 					winner = player;
