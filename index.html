@@ -66,8 +66,8 @@
 
 
 			<div class="tic-tac-toe-container">
-				<div ng-repeat="square in gc.games.gameboard" ng-click="gc.makeMove($index)" class="game-square">
-					{{square.marked}}
+				<div ng-repeat="square in gc.games.gameboard" ng-click="gc.checkForTurn($index)" class="game-square">
+					<p>{{square.marked}}</p>
 				</div>
 			</div>
 
@@ -80,12 +80,19 @@
 
 
 
-		<div ng-if="gc.games.display" id="overlay">
+		<div ng-if="gc.games.display" class="overlay overlay-winner">
 			<div id="modal">
 				<h1>{{gc.games.winner}} is the winner!</h1>
 				<h1>Do you want to play again?</h1>
 				<button class="pink-button" ng-click="gc.clearBoard()">Yes</button>
 				<button class="pink-button" ng-click="pg.changePage(0); gc.endGame()">No</button>
+			</div>
+		</div>
+
+		<div ng-if="gc.games.displayturn" class="overlay overlay-turn">
+			<div id="modal-turn">
+				<h1>{{gc.games.currentPlayer}} goes first!</h1>
+				<button ng-click="gc.clearTurnModal()">OK</button>
 			</div>
 		</div>
 

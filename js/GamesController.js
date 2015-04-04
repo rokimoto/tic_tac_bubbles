@@ -14,31 +14,18 @@
 		// game functions
 		self.initNewGame = initNewGame;
 		self.joinGame = joinGame;
-		self.makeMove = makeMove;
+		self.checkForTurn = checkForTurn;
 		self.clearBoard = clearBoard;
 		self.makePlayer1 = makePlayer1;
 		self.makePlayer2 = makePlayer2;
 		self.endGame = endGame;
-		self.id = null;
-
+		self.clearTurnModal = clearTurnModal;
+		self.toggelHighlight = toggelHighlight;
+		self.id;
+		self.getId = getId;
+		self.turn;
 		self.gamesList = getGameList();
 
-		self.getId = getId;
-
-
-		self.toggelHighlight = toggelHighlight;
-		function toggelHighlight(index) {
-			var game = self.gamesList[index];
-			if (!game.highlighted) {
-				for(var i = 0; i < self.gamesList.length; i++) {
-					self.gamesList[i].highlighted = false;
-					game.highlighted = true;
-				}
-			}
-			else {
-				game.highlighted = false;
-			}
-		}
 
 		// gets game object from firebase when creating new game
 		function getGames() {
@@ -106,12 +93,22 @@
 		function makePlayer1() {
 			var player1 = new Player(self.games.player1.name, "X", true);
 			self.games.player1 = player1;	
+			// game is not in play until player2 joins
 			self.games.inPlay = false;
+			// game is not highlighted in join menu
 			self.games.highlighted = false;
+			//sets game id
 			self.games.id = self.id;
 			self.games.gameboard = gameboard;
+			// display winner modal is set to false
 			self.games.display = false;
+			// display whos turn it is is set to false
+			self.games.displayturn = false;
+			// variable to compare to local turn
+			self.games.turn = true;
+			self.games.currentPlayer = self.games.player1.name;
 			self.games.$save();
+			self.turn = true;
 		}
 
 		// creates player 2
@@ -121,9 +118,13 @@
 			console.log(self.games.player2.name);
 			var player2 = new Player(self.games.player2.name, "O", false);
 			self.games.player2 = player2;
+			// sets inPlay to true and will remove games from game list
 			self.games.inPlay = true;
+			// toggles modal to display whos turn it is
+			self.games.displayturn = true;
 			self.games.player
 			self.games.$save();
+			self.turn = false;
 		}
 
 		// /***************************
@@ -150,12 +151,30 @@
 		//  *      User Functions     *
 		//  ***************************/
 
-		// function checkForTurn() {
-		// 	if (self.turn === self.games.player1.turn) {
-		// 		makeMove(index)
-		// 		self.turn = !self.turn;
-		// 	}
-		// }
+		function toggelHighlight(index) {
+			var game = self.gamesList[index];
+			if (!game.highlighted) {
+				for(var i = 0; i < self.gamesList.length; i++) {
+					self.gamesList[i].highlighted = false;
+					game.highlighted = true;
+				}
+			}
+			else {
+				game.highlighted = false;
+			}
+		}
+
+		// closes "whos turn is it" modal
+		function clearTurnModal() {
+			self.games.displayturn = false
+		}
+		
+		// checks to see if it is your turn
+		function checkForTurn(index) {
+			if (self.turn === self.games.turn) {
+				makeMove(index)
+			}
+		}
 
 		// makes player move
 		function makeMove(index) {
@@ -180,6 +199,8 @@
 				}
 				self.games.player1.turn = false;
 				self.games.player2.turn = true;
+				self.games.turn = !self.games.turn;
+				self.games.currentPlayer = self.games.player2.name;
 				self.games.$save();
 			}
 
@@ -197,6 +218,8 @@
 				}
 				self.games.player2.turn = false;
 				self.games.player1.turn = true;
+				self.games.turn = !self.games.turn;
+				self.games.currentPlayer = self.games.player1.name;
 				self.games.$save();
 			}
 			
@@ -224,8 +247,12 @@
 			}
 			self.games.display = false;
 			self.games.$save();
+			setTimeout(function() {
+				self.games.displayturn = true;
+			}, 500)
 		}
 
+		// removes game from firebase
 		function endGame() {
 			self.games.$remove();
 

@@ -27,7 +27,7 @@ body {
 	width: 48%;
 	margin: 60px auto;
 	border-radius: 7px;
-	padding: 10px 30px 17px 30px;
+	padding: 10px 20px 17px 20px;
 	background-color: rgba(255,255,255, .1);
 }
 
@@ -97,7 +97,6 @@ button:hover {
 --------------------------------*/
 .select-game-page .new-game-page-div {
 	padding: 20px;
-	width: 50%;
 }
 
 .select-game-page h1 {
@@ -133,11 +132,15 @@ font-family: 'Lato', sans-serif;
 
 .enter-name-page .new-game-page-div {
 	padding: 32px;
-	width: 50%;
 }
 
 .enter-name-page h1 {
 	margin-bottom: 24px;
+}
+
+.enter-name-page input {
+	display: block;
+	max-width: 100%;
 }
 
 .enter-name-page button {
@@ -234,7 +237,12 @@ font-family: 'Lato', sans-serif;
 	float: left;
 	font-size: 7em;
 	font-weight: 500;
+	
+}
 
+.game-square p {
+	position: relative;
+	bottom: 5px;
 }
 
 .game-square:nth-child(1), .game-square:nth-child(2), .game-square:nth-child(4), .game-square:nth-child(5), .game-square:nth-child(7),.game-square:nth-child(8) {
@@ -246,6 +254,81 @@ font-family: 'Lato', sans-serif;
 	border-bottom: 5px solid black;
 }
 
+/*--------------------------------
+          OVERLAY
+--------------------------------*/
+
+.overlay {
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0,0,0,0.5);
+	position: absolute;
+	left: 0;
+	top: 0;
+	text-align: center;
+	z-index: 3;
+}
+
+#modal {
+	width: 70%;
+	margin: 180px auto;
+	background-color: white;
+	padding: 20px;
+	text-align: center;
+	font-size: 1.5em;
+	border-radius: 25px;
+	border: 4px solid black;
+}
+#modal h1 {
+	font-family: 'Alegreya Sans SC', sans-serif;
+	letter-spacing: 4px;
+	font-weight: 400;
+}
+
+#modal button {
+	width: 150px;
+	margin: 20px 20px 4px;
+	font-size: 1.4em;
+	padding: 9px;
+	background-color: rgb(218, 218, 218);
+}
+
+#modal button:nth-child(4) {
+	margin-bottom: 30px;
+}
+
+#modal button:hover {
+	background-color: rgb(187, 187, 199);
+}
+
+#modal-turn {
+	width: 70%;
+	margin: 180px auto;
+	background-color: white;
+	padding: 24px;
+	text-align: center;
+	font-size: 1.5em;
+	border-radius: 25px;
+	border: 4px solid black;
+}
+
+#modal-turn h1 {
+	font-family: 'Alegreya Sans SC', sans-serif;
+	letter-spacing: 4px;
+	font-weight: 400;
+}
+
+#modal-turn button {
+	width: 150px;
+	margin: 20px 20px 20px;
+	font-size: 1.4em;
+	padding: 9px;
+	background-color: rgb(218, 218, 218);
+}
+
+#modal-turn button:hover {
+	background-color: rgb(187, 187, 199);
+}
 
 /*--------------------------------
           BUBBLES
