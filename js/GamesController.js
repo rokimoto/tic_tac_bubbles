@@ -20,6 +20,7 @@
 		self.makePlayer2 = makePlayer2;
 		self.endGame = endGame;
 		self.clearTurnModal = clearTurnModal;
+		self.clearClickedModal = clearClickedModal;
 		self.toggelHighlight = toggelHighlight;
 		self.id;
 		self.getId = getId;
@@ -29,7 +30,6 @@
 
 		// gets game object from firebase when creating new game
 		function getGames() {
-			console.log("get new game");
 			var idGen = Math.round(Math.random() * 10000);
 			self.id = idGen;
 			var ref = "https://tictacfish.firebaseio.com/" + idGen;
@@ -66,7 +66,6 @@
 		// gets ID of game to join
 		function getId(id) {
 			self.id = id;
-			console.log(id);
 		}
 
 		// creates gameboard
@@ -113,9 +112,6 @@
 
 		// creates player 2
 		function makePlayer2(gameid) {
-			console.log(self.games);
-			console.log(self.games.player2);
-			console.log(self.games.player2.name);
 			var player2 = new Player(self.games.player2.name, "O", false);
 			self.games.player2 = player2;
 			// sets inPlay to true and will remove games from game list
@@ -168,6 +164,11 @@
 		function clearTurnModal() {
 			self.games.displayturn = false
 		}
+
+		// clears "already been clicked" modal
+		function clearClickedModal() {
+			self.beenClickedAlert = false;
+		}
 		
 		// checks to see if it is your turn
 		function checkForTurn(index) {
@@ -182,21 +183,23 @@
 			var thisSquare = self.games.gameboard[index];
 			
 			if (thisSquare.beenClicked) {
-				alert("ALREADY BEEN CLICKED");
+				self.beenClickedAlert = true;
 			}
 
 			else if (self.games.player1.turn) {
 				thisSquare.marked = "X";
 				thisSquare.beenClicked = true;
 				winner = checkForWinner("X");
+
 				if (winner) {
-					self.games.player1.wins++;
-				
+					self.games.player1.wins++;		
 					restartGame(self.games.player1.name);
 				}
+
 				else {
 					checkForTie();
 				}
+
 				self.games.player1.turn = false;
 				self.games.player2.turn = true;
 				self.games.turn = !self.games.turn;
@@ -207,15 +210,17 @@
 			else {
 				thisSquare.marked = "O";
 				thisSquare.beenClicked = true;
-
 				winner = checkForWinner("O");
+
 				if (winner) {
 					self.games.player2.wins++;
 					restartGame(self.games.player2.name);
 				}
+
 				else {
 					checkForTie();
 				}
+
 				self.games.player2.turn = false;
 				self.games.player1.turn = true;
 				self.games.turn = !self.games.turn;
@@ -274,6 +279,7 @@
 
 		// checks for winner
 		function checkForWinner (player) {
+			console.log("checking")
 			var winner;
 			if (self.games.gameboard[0].marked == player) {
 				if (self.games.gameboard[1].marked == player && self.games.gameboard[2].marked == player) {

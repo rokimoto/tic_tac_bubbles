@@ -4,95 +4,104 @@
 	<title>Tic Tac Fish</title>
 	<link rel="stylesheet" type="text/css" href="css/normalize.css">
 	<link rel="stylesheet" type="text/css" href="bower_components/bootstrap/dist/css/bootstrap.css">
-	<link href='http://fonts.googleapis.com/css?family=Alegreya+Sans+SC|Lato:300,400,700' rel='stylesheet' type='text/css'>
+	<link href='https://fonts.googleapis.com/css?family=Alegreya+Sans+SC|Lato:300,400,700' rel='stylesheet' type='text/css'>
 	<link rel="stylesheet" type="text/css" href="css/style.css">
 	<link rel="stylesheet" type="text/css" href="css/mediaqueries.css">
 </head>
-<body ng-controller="PagesController as pg">
-	<div ng-controller="GamesController as gc" ng-switch="pg.pageDisplay" class="ui grid" id="container">
-		<div class="first-page" ng-switch-default>
-			<div ng-click="pg.changePage(1); gc.initNewGame()" class="intro-div">
-				<h1>Start New Game</h1>
+<body id = "docBody" ng-controller="PagesController as pg">
+	<div ng-controller="GamesController as gc" ng-switch="pg.pageDisplay" id="container">
+		<div id="innerContainer">
+			<div class="first-page" ng-switch-default>
+				<div ng-click="pg.changePage(1); gc.initNewGame()" class="intro-div">
+					<h1>Start New Game</h1>
+				</div>
+				<div class="intro-div" ng-click="pg.changePage(3)">
+					<h1>Join Existing Game</h1>
+				</div>
 			</div>
-			<div class="intro-div" ng-click="pg.changePage(3)">
-				<h1>Join Existing Game</h1>
+			<div class="new-game-page" ng-switch-when="1">
+				<div class="new-game-page-div">
+					<form ng-submit="pg.changePage(5); gc.makePlayer1()">
+						<h1>Enter your name:</h1>
+						<input class="form-control" type="text" ng-model="gc.games.player1.name" placeholder="Enter your name" maxlength="10" required>
+						<h1>Pick a name for your game:</h1>
+						<input class="form-control" type="text" ng-model="gc.games.gameName" placeholder="Enter game name" maxlength="13" required>
+						<button>Go!</button>
+					</form>
+				</div>
 			</div>
-		</div>
-		<div class="new-game-page" ng-switch-when="1">
-			<div class="new-game-page-div">
-				<form ng-submit="pg.changePage(5); gc.makePlayer1()">
-					<h1>Enter your name:</h1>
-					<input class="form-control" type="text" ng-model="gc.games.player1.name" placeholder="Enter your name" maxlength="10" required>
-					<h1>Pick a name for your game:</h1>
-					<input class="form-control" type="text" ng-model="gc.games.gameName" placeholder="Enter game name" maxlength="13" required>
+			<div class="select-game-page" ng-switch-when="3">
+				<div class="new-game-page-div">
+					<form ng-submit="pg.changePage(4); gc.joinGame()">
+					<h1>Select the game you wish to join:</h1>
+					<h2 ng-repeat="game in gc.gamesList" class="game-list-item" ng-class="{clickeditem : game.highlighted}" ng-click="gc.toggelHighlight($index); gc.getId(game.id); pg.clicked = true" ng-hide="game.inPlay">{{game.gameName}}</h2>
 					<button>Go!</button>
-				</form>
+					</form>
+				</div>
 			</div>
-		</div>
-		<div class="select-game-page" ng-switch-when="3">
-			<div class="new-game-page-div">
-				<form ng-submit="pg.changePage(4); gc.joinGame()">
-				<h1>Select the game you wish to join:</h1>
-				<h2 ng-repeat="game in gc.gamesList" class="game-list-item" ng-class="{clickeditem : game.highlighted}" ng-click="gc.toggelHighlight($index); gc.getId(game.id)" ng-hide="game.inPlay">{{game.gameName}}</h2>
-				<button class="pink-button">Go!</button>
-				</form>
+			<div class="enter-name-page" ng-switch-when="4">
+				<div class="new-game-page-div">
+					<form ng-submit="pg.changePage(5); gc.makePlayer2()">
+					<h1>Enter your name:</h1>
+					<input type="text" ng-model="gc.games.player2.name" placeholder="Enter your name" maxlength="10" required>
+					<button>Go!</button>
+					</form>
+				</div>
 			</div>
-		</div>
-		<div class="enter-name-page" ng-switch-when="4">
-			<div class="new-game-page-div">
-				<form ng-submit="pg.changePage(5); gc.makePlayer2()">
-				<h1>Enter your name:</h1>
-				<input type="text" ng-model="gc.games.player2.name" placeholder="Enter your name" maxlength="10" required>
-				<button class="pink-button">Go!</button>
-				</form>
-			</div>
-		</div>
-		<div ng-switch-when="5">
-			<div class="player-stats">
-				<div ng-class="{active: gc.games.player1.turn}" class="x-marker">X</div>
-				<h1>{{gc.games.player1.name}}</h1>
-				<h1>{{gc.games.player1.wins}}</h1>
-				
-			</div>
-			<div class="player-stats">
-				<div ng-class="{active: gc.games.player2.turn}" class="o-marker">O</div>
-				<h1>{{gc.games.player2.name}}</h1>
-				<h1>{{gc.games.player2.wins}}</h1>
-				
-			</div>
-			<div class="game-title">
-				<h1>{{gc.games.gameName}}</h1>
-			</div>
+			<div ng-switch-when="5">
+				<div class="player-stats">
+					<div ng-class="{active: gc.games.player1.turn}" class="x-marker">X</div>
+					<h1>{{gc.games.player1.name}}</h1>
+					<h1>{{gc.games.player1.wins}}</h1>
+					
+				</div>
+				<div class="player-stats">
+					<div ng-class="{active: gc.games.player2.turn}" class="o-marker">O</div>
+					<h1>{{gc.games.player2.name}}</h1>
+					<h1>{{gc.games.player2.wins}}</h1>
+					
+				</div>
+				<div class="game-title">
+					<h1>{{gc.games.gameName}}</h1>
+				</div>
 
 
-			<div class="tic-tac-toe-container">
-				<div ng-repeat="square in gc.games.gameboard" ng-click="gc.checkForTurn($index)" class="game-square">
-					<p>{{square.marked}}</p>
+				<div class="tic-tac-toe-container">
+					<div ng-repeat="square in gc.games.gameboard" ng-click="gc.checkForTurn($index)" class="game-square">
+						<p>{{square.marked}}</p>
+					</div>
+				</div>
+
+
+			 </div> <!-- end main game page div -->
+
+
+
+
+
+
+
+			<div ng-if="gc.games.display" class="overlay overlay-winner">
+				<div id="modal">
+					<h1>{{gc.games.winner}} is the winner!</h1>
+					<h1>Do you want to play again?</h1>
+					<button ng-click="gc.clearBoard()">Yes</button>
+					<button ng-click="pg.changePage(0); gc.endGame()">No</button>
 				</div>
 			</div>
 
-
-		 </div> <!-- end main game page div -->
-
-
-
-
-
-
-
-		<div ng-if="gc.games.display" class="overlay overlay-winner">
-			<div id="modal">
-				<h1>{{gc.games.winner}} is the winner!</h1>
-				<h1>Do you want to play again?</h1>
-				<button class="pink-button" ng-click="gc.clearBoard()">Yes</button>
-				<button class="pink-button" ng-click="pg.changePage(0); gc.endGame()">No</button>
+			<div ng-if="gc.games.displayturn" class="overlay overlay-turn">
+				<div id="modal-turn">
+					<h1>{{gc.games.currentPlayer}} goes first!</h1>
+					<button ng-click="gc.clearTurnModal()">OK</button>
+				</div>
 			</div>
-		</div>
 
-		<div ng-if="gc.games.displayturn" class="overlay overlay-turn">
-			<div id="modal-turn">
-				<h1>{{gc.games.currentPlayer}} goes first!</h1>
-				<button ng-click="gc.clearTurnModal()">OK</button>
+			<div ng-if="gc.beenClickedAlert" class="overlay overlay-clicked">
+				<div id="modal-clicked">
+					<h1>That square has already been clicked!</h1>
+					<button ng-click="gc.clearClickedModal()">OK</button>
+				</div>
 			</div>
 		</div>
 

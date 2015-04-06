@@ -13,9 +13,6 @@
 	}
 }
 @media (min-width: 992px) {
-	body {
-		background: -webkit-linear-gradient(#901E86, #CC96D5) no-repeat center center fixed;
-	}
 
 	.new-game-page-div {
 		width: 56%;
@@ -102,9 +99,6 @@
 }
 
 @media (min-width: 1200px) {
-	body {
-		background: -webkit-linear-gradient(#2228A1, #7D81A5) no-repeat center center fixed;
-	}
 
 	.new-game-page-div {
 		width: 50%;

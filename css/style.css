@@ -3,18 +3,23 @@
 --------------------------------*/
 * {
 	box-sizing: border-box;
-
 }
 
 body {
-	background: -webkit-linear-gradient(#319399, #85DBDF) no-repeat center center fixed;
-	-webkit-background-size: cover;
-  	-moz-background-size: cover;
-  	-o-background-size: cover;
-  	background-size: cover;
   	text-align: center;
   	color: black;
 	-webkit-font-smoothing: antialiased;
+	background: linear-gradient(180deg, #319399, #85dbdf, #cc96d5, #901e86, #2228a1, #7d81a5, #a65233, #DB3B00, #319399);
+	background-size: 1800% 1800%;
+	-webkit-animation: colorchange 180s ease infinite;
+	animation: colorchange 120s ease infinite;
+}
+
+#docBody {
+	visibility: hidden;
+}
+
+#container {
 	overflow: hidden;
 }
 
@@ -120,6 +125,7 @@ font-family: 'Lato', sans-serif;
 
 .select-game-page button {
 	margin-top: 24px;
+	margin-bottom: 20px;
 }
 
 .clickeditem {
@@ -208,7 +214,6 @@ font-family: 'Lato', sans-serif;
 	height: 80px;
 	margin: 20px auto 0;
 	background-color: rgba(255,255,255,0.9)
-
 }
 
 .game-title h1 {
@@ -219,8 +224,8 @@ font-family: 'Lato', sans-serif;
 	font-family: 'Alegreya Sans SC', sans-serif;
 	letter-spacing: 4px;
 	font-weight: 400;
-
 }
+
 /*--------------------------------
           TIC TAC TOE BOARD
 --------------------------------*/
@@ -229,15 +234,15 @@ font-family: 'Lato', sans-serif;
 	position: relative;
 	top: -90px;
 	width: 90%;
-	margin: 0 auto;
+	margin: 0 auto 250px;
 }
+
 .game-square {
 	height: 140px;
 	width: 33%;
 	float: left;
 	font-size: 7em;
 	font-weight: 500;
-	
 }
 
 .game-square p {
@@ -259,8 +264,8 @@ font-family: 'Lato', sans-serif;
 --------------------------------*/
 
 .overlay {
-	width: 100%;
-	height: 100%;
+	width: 150%;
+	height: 150%;
 	background-color: rgba(0,0,0,0.5);
 	position: absolute;
 	left: 0;
@@ -330,6 +335,35 @@ font-family: 'Lato', sans-serif;
 	background-color: rgb(187, 187, 199);
 }
 
+#modal-clicked {
+	width: 70%;
+	margin: 180px auto;
+	background-color: white;
+	padding: 24px;
+	text-align: center;
+	font-size: 1.5em;
+	border-radius: 25px;
+	border: 4px solid black;
+}
+
+#modal-clicked h1 {
+	font-family: 'Alegreya Sans SC', sans-serif;
+	letter-spacing: 4px;
+	font-weight: 400;
+}
+
+#modal-clicked button {
+	width: 150px;
+	margin: 20px 20px 20px;
+	font-size: 1.4em;
+	padding: 9px;
+	background-color: rgb(218, 218, 218);
+}
+
+#modal-clicked button:hover {
+	background-color: rgb(187, 187, 199);
+}
+
 /*--------------------------------
           BUBBLES
 --------------------------------*/
@@ -339,10 +373,23 @@ font-family: 'Lato', sans-serif;
 	border-radius: 100%;
 	border: 2px solid white;
 	position: absolute;
-	bottom: -100px;
-	/*-webkit-animation: bubbleup 10s ease infinite;*/
-	animation-iteration-count: infinite;
-	-webkit-animation-iteration-count: infinite;
+	bottom: -400px;
 	z-index: -2;
 	background-color: white;
+}
+
+/*--------------------------------
+      BACKGROUND ANIMATION
+--------------------------------*/
+
+@-webkit-keyframes colorchange {
+    0%{background-position:50% 0%}
+    50%{background-position:50% 100%}
+    100%{background-position:50% 0%}
+}
+
+@keyframes colorchange { 
+    0%{background-position:50% 0%}
+    50%{background-position:50% 100%}
+    100%{background-position:50% 0%}
 }

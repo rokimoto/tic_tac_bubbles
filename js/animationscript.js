@@ -1,7 +1,6 @@
 (function() {
 	var container = document.getElementById('container');
 
-
 	function makeBubbles() {
 		for(var i = 0; i < 30; i++) {
 			var opacity = getRandomOpacity();
