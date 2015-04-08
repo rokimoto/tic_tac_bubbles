@@ -13,9 +13,12 @@
 			bubble.style.height = dimension + "px";
 			bubble.style.width = dimension + "px";
 			bubble.style.left = location + "%";
+			bubble.style.bottom = "-300px";
 			bubble.style.opacity = opacity;
 			$(bubble).delay(delay).animate({
-				bottom: "105%"}, speed);
+				bottom: "105%"}, speed, "swing", function() {
+					$(bubble).remove();
+				});
 			container.appendChild(bubble);
 		}
 	}

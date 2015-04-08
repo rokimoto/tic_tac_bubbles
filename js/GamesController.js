@@ -34,6 +34,7 @@
 			self.id = idGen;
 			var ref = "https://tictacfish.firebaseio.com/" + idGen;
 		  	ref = new Firebase(ref);
+		  	ref.onDisconnect().remove();
 		  	var games = $firebaseObject(ref);
 		  	return games;
 		}
@@ -54,6 +55,7 @@
 		function getJoinGames() {
 			var ref = "https://tictacfish.firebaseio.com/" + self.id;
 		  	ref = new Firebase(ref);
+		  	ref.onDisconnect().remove();
 		  	var games = $firebaseObject(ref);
 		  	return games;
 		}
@@ -254,7 +256,8 @@
 			self.games.$save();
 			setTimeout(function() {
 				self.games.displayturn = true;
-			}, 500)
+				self.games.$save();
+			}, 200)
 		}
 
 		// removes game from firebase
